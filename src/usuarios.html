@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Usuários</h1>
+    <ul id="usuariosLista"></ul>
+
+    <script>
+        // Função para buscar e exibir usuários
+        async function carregarUsuarios() {
+            try {
+                const resposta = await fetch('/usuarios'); // A rota que retorna os usuários em JSON
+                if (!resposta.ok) {
+                    throw new Error('Erro ao buscar usuários'); // Lidar com erro se a resposta não for ok
+                }
+                const usuarios = await resposta.json();
+                const lista = document.getElementById('usuariosLista');
+                usuarios.forEach(usuario => {
+                    const item = document.createElement('li');
+                    item.textContent = `Nome: ${usuario.nome}, Email: ${usuario.email}`;
+                    lista.appendChild(item);
+                }); 
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+            }
+        }
+
+        // Carregar usuários assim que a página for carregada
+        window.onload = carregarUsuarios;
+    </script>
+</body>
+</html>

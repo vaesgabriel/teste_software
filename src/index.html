@@ -6,60 +6,66 @@
     <title>Teste de Sistema</title>
     <style>
         body {
-            font-family: Arial, sans-serif; /* Define a fonte da página */
-            background-color: #f0f0f0; /* Cor de fundo */
-            margin: 0; /* Remove margens padrão */
-            padding: 20px; /* Adiciona espaço interno */
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
         }
 
         h1 {
-            color: #333; /* Cor do título */
-            text-align: center; /* Centraliza o título */
+            color: #333;
+            text-align: center;
         }
 
         form {
-            background-color: #fff; /* Cor de fundo do formulário */
-            padding: 20px; /* Espaçamento interno do formulário */
-            border-radius: 5px; /* Cantos arredondados */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra do formulário */
-            max-width: 400px; /* Largura máxima do formulário */
-            margin: auto; /* Centraliza o formulário na página */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
         }
 
         input[type="text"],
         input[type="email"] {
-            width: 100%; /* Largura total do campo */
-            padding: 10px; /* Espaçamento interno */
-            margin: 10px 0; /* Margem superior e inferior */
-            border: 1px solid #ccc; /* Borda do campo */
-            border-radius: 5px; /* Cantos arredondados */
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Espaçamento entre os botões */
         }
 
         button {
-            background-color: #28a745; /* Cor do botão */
-            color: white; /* Cor do texto do botão */
-            padding: 10px; /* Espaçamento interno do botão */
-            border: none; /* Remove borda */
-            border-radius: 5px; /* Cantos arredondados do botão */
-            cursor: pointer; /* Cursor pointer ao passar o mouse */
-            width: 100%; /* Largura total do botão */
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
         }
 
         button:hover {
-            background-color: #218838; /* Cor do botão ao passar o mouse */
+            background-color: #218838;
         }
 
         ul {
-            list-style-type: none; /* Remove marcadores da lista */
-            padding: 0; /* Remove espaçamento padrão da lista */
+            list-style-type: none;
+            padding: 0;
         }
 
         li {
-            background-color: #fff; /* Cor de fundo dos itens da lista */
-            margin: 5px 0; /* Margem entre os itens da lista */
-            padding: 10px; /* Espaçamento interno dos itens da lista */
-            border-radius: 5px; /* Cantos arredondados dos itens da lista */
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Sombra dos itens da lista */
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -68,7 +74,11 @@
     <form id="usuarioForm">
         <input type="text" id="nome" placeholder="Nome" required />
         <input type="email" id="email" placeholder="Email" required />
-        <button type="submit">Cadastrar</button>
+        
+        <div class="button-container">
+            <button type="submit">Cadastrar</button>
+            <button type="button" onclick="window.location.href='usuarios.html'">Ver Usuários</button>
+        </div>
     </form>
     <ul id="usuariosLista"></ul>
 
