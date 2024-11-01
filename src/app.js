@@ -21,6 +21,8 @@ app.use(express.json());
 // Define a rota '/usuarios' para as rotas de usuário, utilizando o router importado
 app.use('/usuarios', usuarioRoutes);
 
+app.use(express.urlencoded({ extended: true }));
+
 // Rota principal para servir o arquivo 'index.html' como página inicial da aplicação
 app.get('/', (req, res) => {
   // Envia o arquivo 'index.html' como resposta quando a rota principal é acessada

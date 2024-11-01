@@ -2,66 +2,250 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuários Cadastrados</title>
+    <title>Lista de Usuários</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
-        }
-
+        /* Estilos para lista de usuários e layout */
         ul {
             list-style-type: none;
             padding: 0;
-            max-width: 400px;
-            margin: auto;
         }
-
         li {
-            background-color: #fff;
-            margin: 5px 0;
+            margin: 10px 0;
             padding: 10px;
+            background-color: #f8f9fa;
             border-radius: 5px;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .button-container {
-            margin-top: 20px;
-        }
-
         button {
-            background-color: #28a745;
-            color: white;
-            padding: 10px;
+            padding: 5px 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 150px;
+        }
+        button.excluir {
+            background-color: #dc3545;
+            color: white;
+        }
+        button.excluir:hover {
+            background-color: #c82333;
+        }
+        button.editar {
+            background-color: #fd7e14; /* Laranja */
+            color: white;
+            margin-left: 10px; /* Adiciona espaço entre os botões */
+        }
+        button.editar:hover {
+            background-color: #e86c00; /* Laranja escuro ao passar o mouse */
+        }
+        button.voltar {
+            background-color: #007bff;
+            color: white;
+        }
+        button.voltar:hover {
+            background-color: #0069d9;
         }
 
-        button:hover {
+        /* Estilos para o modal de confirmação */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            text-align: center;
+        }
+        .modal button {
+            margin: 10px 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .modal button.confirmar {
+            background-color: #28a745;
+            color: white;
+        }
+        .modal button.confirmar:hover {
             background-color: #218838;
+        }
+        .modal button.cancelar {
+            background-color: #dc3545;
+            color: white;
+        }
+        .modal button.cancelar:hover {
+            background-color: #c82333;
+        }
+
+        /* Estilos para o alerta personalizado */
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Estilos para o formulário de edição */
+        .form-edicao {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .form-edicao input {
+            width: calc(100% - 22px);
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
         }
     </style>
 </head>
 <body>
     <h1>Usuários Cadastrados</h1>
-    <ul>
+    <ul id="usuariosLista">
         <% usuarios.forEach(usuario => { %>
-            <li>Nome: <%= usuario.nome %>, Email: <%= usuario.email %></li>
-        <% }); %>
+            <li id="usuario-<%= usuario.id %>">
+                <span>Nome: <%= usuario.nome %> | Email: <%= usuario.email %></span>
+                <div>
+                    <button class="editar" onclick="abrirFormularioEdicao(<%= usuario.id %>, '<%= usuario.nome %>', '<%= usuario.email %>')">Editar</button>
+                    <button class="excluir" onclick="confirmarExclusao(<%= usuario.id %>)">Excluir</button>
+                </div>
+            </li>
+        <% }) %>
     </ul>
+    <button class="voltar" onclick="window.location.href='/'">Voltar para Cadastro</button>
 
-    <div class="button-container">
-        <!-- Botão para voltar à página de cadastro -->
-        <button onclick="window.location.href='/'">Voltar ao Cadastro</button>
+    <!-- Modal de confirmação -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal">
+            <p>Tem certeza de que deseja excluir este usuário?</p>
+            <button class="confirmar" onclick="excluirUsuarioConfirmado()">Sim</button>
+            <button class="cancelar" onclick="fecharModal()">Não</button>
+        </div>
     </div>
+
+    <!-- Alerta personalizado -->
+    <div id="alert" class="alert">Usuário excluído com sucesso!</div>
+
+    <!-- Formulário de Edição -->
+    <div id="formEdicao" class="form-edicao">
+        <h2>Editar Usuário</h2>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" />
+        <label for="email">Email:</label>
+        <input type="email" id="email" />
+        <button onclick="salvarEdicao()">Salvar</button>
+        <button onclick="fecharFormularioEdicao()">Cancelar</button>
+    </div>
+
+    <script>
+        let usuarioIdParaExcluir;
+        let usuarioIdParaEditar;
+
+        function confirmarExclusao(id) {
+            usuarioIdParaExcluir = id;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            usuarioIdParaExcluir = null;
+        }
+
+        async function excluirUsuarioConfirmado() {
+            if (usuarioIdParaExcluir) {
+                const resposta = await fetch(`/usuarios/${usuarioIdParaExcluir}`, {
+                    method: 'DELETE'
+                });
+
+                if (resposta.ok) {
+                    mostrarAlerta('Usuário excluído com sucesso!');
+                    document.getElementById(`usuario-${usuarioIdParaExcluir}`).remove();
+                } else {
+                    mostrarAlerta('Erro ao excluir o usuário.');
+                }
+            }
+            fecharModal();
+        }
+
+        function abrirFormularioEdicao(id, nome, email) {
+            usuarioIdParaEditar = id;
+            document.getElementById('nome').value = nome;
+            document.getElementById('email').value = email;
+            document.getElementById('formEdicao').style.display = 'block';
+        }
+
+        function fecharFormularioEdicao() {
+            document.getElementById('formEdicao').style.display = 'none';
+            usuarioIdParaEditar = null;
+        }
+
+        async function salvarEdicao() {
+            const novoNome = document.getElementById('nome').value;
+            const novoEmail = document.getElementById('email').value;
+
+            if (!novoNome || !novoEmail) {
+                mostrarAlerta('Nome e email são obrigatórios.');
+                return;
+            }
+
+            if (usuarioIdParaEditar) {
+                try {
+                    const resposta = await fetch(`/usuarios/${usuarioIdParaEditar}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ nome: novoNome, email: novoEmail })
+                    });
+
+                    if (resposta.ok) {
+                        mostrarAlerta('Usuário atualizado com sucesso!');
+                        const usuarioItem = document.getElementById(`usuario-${usuarioIdParaEditar}`);
+                        usuarioItem.querySelector('span').innerHTML = `Nome: ${novoNome} | Email: ${novoEmail}`;
+                        fecharFormularioEdicao();
+                    } else {
+                        mostrarAlerta('Erro ao atualizar o usuário.');
+                    }
+                } catch (error) {
+                    console.error('Erro ao salvar edição:', error);
+                    mostrarAlerta('Erro ao atualizar o usuário.');
+                }
+            }
+        }
+
+        function mostrarAlerta(mensagem) {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.textContent = mensagem;
+            alertDiv.style.display = 'block';
+            alertDiv.style.opacity = '1';
+
+            setTimeout(() => {
+                alertDiv.style.opacity = '0';
+                setTimeout(() => alertDiv.style.display = 'none', 500); // Espera o fade-out terminar
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
