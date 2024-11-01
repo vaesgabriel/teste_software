@@ -1,49 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8"> <!-- Define a codificação de caracteres como UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Define a responsividade da página -->
-    <title>Teste de Sistema</title> <!-- Título da página exibido na aba do navegador -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Sistema</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Define a fonte da página */
+            background-color: #f0f0f0; /* Cor de fundo */
+            margin: 0; /* Remove margens padrão */
+            padding: 20px; /* Adiciona espaço interno */
+        }
+
+        h1 {
+            color: #333; /* Cor do título */
+            text-align: center; /* Centraliza o título */
+        }
+
+        form {
+            background-color: #fff; /* Cor de fundo do formulário */
+            padding: 20px; /* Espaçamento interno do formulário */
+            border-radius: 5px; /* Cantos arredondados */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra do formulário */
+            max-width: 400px; /* Largura máxima do formulário */
+            margin: auto; /* Centraliza o formulário na página */
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%; /* Largura total do campo */
+            padding: 10px; /* Espaçamento interno */
+            margin: 10px 0; /* Margem superior e inferior */
+            border: 1px solid #ccc; /* Borda do campo */
+            border-radius: 5px; /* Cantos arredondados */
+        }
+
+        button {
+            background-color: #28a745; /* Cor do botão */
+            color: white; /* Cor do texto do botão */
+            padding: 10px; /* Espaçamento interno do botão */
+            border: none; /* Remove borda */
+            border-radius: 5px; /* Cantos arredondados do botão */
+            cursor: pointer; /* Cursor pointer ao passar o mouse */
+            width: 100%; /* Largura total do botão */
+        }
+
+        button:hover {
+            background-color: #218838; /* Cor do botão ao passar o mouse */
+        }
+
+        ul {
+            list-style-type: none; /* Remove marcadores da lista */
+            padding: 0; /* Remove espaçamento padrão da lista */
+        }
+
+        li {
+            background-color: #fff; /* Cor de fundo dos itens da lista */
+            margin: 5px 0; /* Margem entre os itens da lista */
+            padding: 10px; /* Espaçamento interno dos itens da lista */
+            border-radius: 5px; /* Cantos arredondados dos itens da lista */
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Sombra dos itens da lista */
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Cadastro de Usuários</h1> <!-- Título principal da página -->
-
-    <!-- Formulário para cadastro de usuários -->
+    <h1>Cadastro de Usuários</h1>
     <form id="usuarioForm">
-        <input type="text" id="nome" placeholder="Nome" required /> <!-- Campo para o nome do usuário -->
-        <input type="email" id="email" placeholder="Email" required /> <!-- Campo para o email do usuário -->
-        <button type="submit">Cadastrar</button> <!-- Botão para enviar o formulário -->
+        <input type="text" id="nome" placeholder="Nome" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <button type="submit">Cadastrar</button>
     </form>
-
-    <ul id="usuariosLista"></ul> <!-- Lista onde os usuários cadastrados serão exibidos -->
+    <ul id="usuariosLista"></ul>
 
     <script>
-        // Função executada ao submeter o formulário
         document.getElementById('usuarioForm').onsubmit = async function (event) {
-            event.preventDefault(); // Impede o recarregamento da página ao submeter o formulário
+            event.preventDefault();
 
-            // Obtém os valores dos campos do formulário
-            const nome = document.getElementById('nome').value; // Obtém o nome
-            const email = document.getElementById('email').value; // Obtém o email
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
 
-            // Faz uma requisição POST para o servidor com os dados do usuário
             const resposta = await fetch('/usuarios', {
-                method: 'POST', // Define o método HTTP como POST
-                headers: { 'Content-Type': 'application/json' }, // Define o cabeçalho da requisição para JSON
-                body: JSON.stringify({ nome, email }) // Converte os dados do usuário em uma string JSON
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, email })
             });
 
-            // Se a resposta for positiva, exibe o usuário na lista
             if (resposta.ok) {
-                const usuario = await resposta.json(); // Converte a resposta em um objeto JSON
-                const item = document.createElement('li'); // Cria um novo item de lista
-                item.textContent = `Nome: ${usuario.nome}, Email: ${usuario.email}`; // Define o conteúdo do item
-                document.getElementById('usuariosLista').appendChild(item); // Adiciona o item à lista de usuários
+                const usuario = await resposta.json();
+                const item = document.createElement('li');
+                item.textContent = `Nome: ${usuario.nome}, Email: ${usuario.email}`;
+                document.getElementById('usuariosLista').appendChild(item);
             }
         };
     </script>
 </body>
-
 </html>
