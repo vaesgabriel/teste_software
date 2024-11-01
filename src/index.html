@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres como UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Define a responsividade da página -->
+    <title>Teste de Sistema</title> <!-- Título da página exibido na aba do navegador -->
+</head>
+
+<body>
+    <h1>Cadastro de Usuários</h1> <!-- Título principal da página -->
+
+    <!-- Formulário para cadastro de usuários -->
+    <form id="usuarioForm">
+        <input type="text" id="nome" placeholder="Nome" required /> <!-- Campo para o nome do usuário -->
+        <input type="email" id="email" placeholder="Email" required /> <!-- Campo para o email do usuário -->
+        <button type="submit">Cadastrar</button> <!-- Botão para enviar o formulário -->
+    </form>
+
+    <ul id="usuariosLista"></ul> <!-- Lista onde os usuários cadastrados serão exibidos -->
+
+    <script>
+        // Função executada ao submeter o formulário
+        document.getElementById('usuarioForm').onsubmit = async function (event) {
+            event.preventDefault(); // Impede o recarregamento da página ao submeter o formulário
+
+            // Obtém os valores dos campos do formulário
+            const nome = document.getElementById('nome').value; // Obtém o nome
+            const email = document.getElementById('email').value; // Obtém o email
+
+            // Faz uma requisição POST para o servidor com os dados do usuário
+            const resposta = await fetch('/usuarios', {
+                method: 'POST', // Define o método HTTP como POST
+                headers: { 'Content-Type': 'application/json' }, // Define o cabeçalho da requisição para JSON
+                body: JSON.stringify({ nome, email }) // Converte os dados do usuário em uma string JSON
+            });
+
+            // Se a resposta for positiva, exibe o usuário na lista
+            if (resposta.ok) {
+                const usuario = await resposta.json(); // Converte a resposta em um objeto JSON
+                const item = document.createElement('li'); // Cria um novo item de lista
+                item.textContent = `Nome: ${usuario.nome}, Email: ${usuario.email}`; // Define o conteúdo do item
+                document.getElementById('usuariosLista').appendChild(item); // Adiciona o item à lista de usuários
+            }
+        };
+    </script>
+</body>
+
+</html>
