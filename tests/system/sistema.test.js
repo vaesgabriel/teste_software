@@ -22,35 +22,49 @@ afterAll(() => {
   server.close(); // Fecha a instância do servidor
 });
 
+// Limpa os mocks antes de cada teste
+beforeEach(() => {
+  Usuario.create.mockClear(); // Limpa o mock do método create
+});
+
 // Teste para simular a criação de um usuário no navegador
 test('Simulação de criação de usuário no navegador', async () => {
   // Define o retorno simulado para a criação de um usuário
   Usuario.create.mockResolvedValue({ nome: "Alice", email: "alice@example.com" });
 
   // Inicializa o navegador e abre uma nova página
-  const navegador = await puppeteer.launch();
-  const pagina = await navegador.newPage();
+  let navegador;
+  try {
+    navegador = await puppeteer.launch();
+    const pagina = await navegador.newPage();
 
-  // Acessa a aplicação na URL local
-  await pagina.goto('http://localhost:3000');
+    // Acessa a aplicação na URL local
+    await pagina.goto('http://localhost:3000');
 
-  // Preenche os campos de nome e email no formulário
-  await pagina.type('#nome', 'Alice'); // Digita 'Alice' no campo de nome
-  await pagina.type('#email', 'alice@example.com'); // Digita 'alice@example.com' no campo de email
+    // Preenche os campos de nome e email no formulário
+    await pagina.type('#nome', 'Alice'); // Digita 'Alice' no campo de nome
+    await pagina.type('#email', 'alice@example.com'); // Digita 'alice@example.com' no campo de email
 
-  // Clica no botão de submit para enviar o formulário
-  await pagina.click('button[type="submit"]');
+    // Clica no botão de submit para enviar o formulário
+    await pagina.click('button[type="submit"]');
 
-  // Espera que o novo usuário apareça na lista
-  await pagina.waitForSelector('#usuariosLista li');
+    // Espera que o novo usuário apareça na lista
+    await pagina.waitForSelector('#usuariosLista li', { timeout: 5000 });
 
-  // Obtém o texto do primeiro item da lista para verificar a criação
-  const usuarioTexto = await pagina.$eval('#usuariosLista li', el => el.textContent);
+    // Obtém o texto do primeiro item da lista para verificar a criação
+    const usuarioTexto = await pagina.$eval('#usuariosLista li', el => el.textContent);
 
-  // Verifica se o texto do usuário contém os dados esperados
-  expect(usuarioTexto).toContain('Alice'); // Verifica se 'Alice' está no texto
-  expect(usuarioTexto).toContain('alice@example.com'); // Verifica se o email está no texto
+    // Verifica se o texto do usuário contém os dados esperados
+    expect(usuarioTexto).toContain('Alice'); // Verifica se 'Alice' está no texto
+    expect(usuarioTexto).toContain('alice@example.com'); // Verifica se o email está no texto
 
-  // Fecha o navegador ao final do teste
-  await navegador.close();
+  } catch (error) {
+    console.error('Erro durante o teste:', error);
+    throw error; // Rethrow para falhar o teste
+  } finally {
+    // Fecha o navegador ao final do teste
+    if (navegador) {
+      await navegador.close();
+    }
+  }
 });

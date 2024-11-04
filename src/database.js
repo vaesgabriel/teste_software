@@ -12,4 +12,4 @@ const sequelize = new Sequelize({
 });
 
 // Exporta a instância do Sequelize para que possa ser utilizada em outros arquivos da aplicação
-module.exports = sequelize; 
+module.exports = sequelize;

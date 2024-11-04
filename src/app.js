@@ -21,6 +21,7 @@ app.use(express.json());
 // Define a rota '/usuarios' para as rotas de usuário, utilizando o router importado
 app.use('/usuarios', usuarioRoutes);
 
+// Middleware para processar dados URL-encoded (formulários)
 app.use(express.urlencoded({ extended: true }));
 
 // Rota principal para servir o arquivo 'index.html' como página inicial da aplicação
@@ -32,11 +33,11 @@ app.get('/', (req, res) => {
 // Rota para servir a página 'usuarios.html' e buscar os usuários do banco de dados
 app.get('/usuarios.html', async (req, res) => {
   try {
-    const usuarios = await Usuario.findAll(); // Busca todos os usuários
+    const usuarios = await Usuario.findAll(); // Busca todos os usuários no banco de dados
     res.render('usuarios', { usuarios }); // Renderiza a página com a lista de usuários
   } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
-    res.status(500).send('Erro ao carregar a página de usuários');
+    console.error('Erro ao buscar usuários:', error); // Loga o erro no console
+    res.status(500).send('Erro ao carregar a página de usuários'); // Retorna um erro 500
   }
 });
 

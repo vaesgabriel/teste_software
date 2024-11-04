@@ -25,10 +25,15 @@ describe('Usuários API', () => {
     Usuario.create.mockResolvedValue({ nome: "Alice", email: "alice@example.com" });
 
     // Faz a requisição POST para criar um novo usuário com nome e email
-    const resposta = await request(app).post('/usuarios').send({ nome: "Alice", email: "alice@example.com" });
+    const resposta = await request(app)
+      .post('/usuarios')
+      .send({ nome: "Alice", email: "alice@example.com" });
 
     // Verifica se a resposta tem status 201 (Criado)
     expect(resposta.status).toBe(201);
+
+    // Verifica se a resposta tem o formato JSON
+    expect(resposta.headers['content-type']).toMatch(/json/);
 
     // Verifica se o nome do usuário na resposta é o esperado
     expect(resposta.body.nome).toBe("Alice");
@@ -48,10 +53,23 @@ describe('Usuários API', () => {
     // Verifica se a resposta tem status 200 (Sucesso)
     expect(resposta.status).toBe(200);
 
+    // Verifica se a resposta tem o formato JSON
+    expect(resposta.headers['content-type']).toMatch(/json/);
+
     // Verifica se o número de usuários retornados é o esperado
     expect(resposta.body.length).toBe(2);
 
     // Verifica o nome do primeiro usuário retornado
     expect(resposta.body[0].nome).toBe("Alice");
+  });
+
+  // Teste para a criação de um usuário sem dados obrigatórios
+  test('Tentativa de criar usuário sem dados - POST /usuarios', async () => {
+    const resposta = await request(app)
+      .post('/usuarios')
+      .send({}); // Enviando dados vazios
+
+    // Verifica se a resposta tem status 400 (Bad Request)
+    expect(resposta.status).toBe(400);
   });
 });

@@ -33,6 +33,19 @@
             align-items: center;
         }
 
+        button {
+            background-color: #007bff; /* Cor do botão */
+            color: white; /* Cor do texto do botão */
+            border: none; /* Remove a borda padrão */
+            padding: 5px 10px; /* Adiciona espaçamento interno */
+            border-radius: 5px; /* Arredonda os cantos do botão */
+            cursor: pointer; /* Muda o cursor para indicar que é clicável */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Cor do botão ao passar o mouse */
+        }
+
         /* Estilos do modal de edição */
         .modal-overlay {
             position: fixed;
@@ -45,13 +58,16 @@
             justify-content: center;
             align-items: center;
         }
+
         .modal {
             background: white;
             padding: 20px;
             border-radius: 8px;
             max-width: 400px;
             width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra do modal */
         }
+
         .modal input {
             width: 100%;
             margin: 10px 0;

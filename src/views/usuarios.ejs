@@ -4,120 +4,159 @@
     <meta charset="UTF-8">
     <title>Lista de Usuários</title>
     <style>
+        /* Estilos globais para o corpo da página */
+        body {
+            font-family: Arial, sans-serif; /* Define a fonte da página */
+            max-width: 800px; /* Limita a largura máxima da página */
+            margin: 0 auto; /* Centraliza a página */
+            padding: 20px; /* Adiciona espaçamento interno */
+            background-color: #f8f9fa; /* Define a cor de fundo */
+        }
+
         /* Estilos para lista de usuários e layout */
         ul {
-            list-style-type: none;
-            padding: 0;
+            list-style-type: none; /* Remove os marcadores da lista */
+            padding: 0; /* Remove o preenchimento padrão */
         }
         li {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin: 10px 0; /* Espaçamento entre os itens da lista */
+            padding: 10px; /* Preenchimento interno dos itens */
+            background-color: #ffffff; /* Cor de fundo dos itens */
+            border-radius: 5px; /* Bordas arredondadas */
+            display: flex; /* Usa flexbox para layout */
+            justify-content: space-between; /* Espaça os itens do li */
+            align-items: center; /* Centraliza verticalmente */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
         }
         button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            padding: 10px 20px; /* Preenchimento interno dos botões */
+            border: none; /* Remove borda padrão */
+            border-radius: 5px; /* Bordas arredondadas */
+            cursor: pointer; /* Muda o cursor ao passar o mouse */
+            font-size: 16px; /* Tamanho da fonte dos botões */
         }
         button.excluir {
-            background-color: #dc3545;
-            color: white;
+            background-color: #dc3545; /* Cor de fundo para o botão de excluir */
+            color: white; /* Cor do texto */
         }
         button.excluir:hover {
-            background-color: #c82333;
+            background-color: #c82333; /* Cor ao passar o mouse */
         }
         button.editar {
-            background-color: #fd7e14; /* Laranja */
-            color: white;
-            margin-left: 10px; /* Adiciona espaço entre os botões */
+            background-color: #ffa600; /* Cor de fundo para o botão de editar */
+            color: white; /* Cor do texto */
+            margin-left: 10px; /* Espaçamento à esquerda */
         }
         button.editar:hover {
-            background-color: #e86c00; /* Laranja escuro ao passar o mouse */
+            background-color: #ff8800; /* Cor ao passar o mouse */
         }
         button.voltar {
-            background-color: #007bff;
-            color: white;
+            background-color: #007bff; /* Cor de fundo para o botão de voltar */
+            color: white; /* Cor do texto */
+            margin-top: 20px; /* Espaçamento superior */
         }
         button.voltar:hover {
-            background-color: #0069d9;
+            background-color: #0069d9; /* Cor ao passar o mouse */
         }
 
         /* Estilos para o modal de confirmação */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
+            position: fixed; /* Fixa o modal na tela */
+            top: 0; /* Alinha ao topo */
+            left: 0; /* Alinha à esquerda */
+            width: 100%; /* Largura total da tela */
+            height: 100%; /* Altura total da tela */
+            background: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+            display: none; /* Inicialmente oculto */
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
         }
         .modal {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 400px;
-            text-align: center;
+            background: white; /* Cor de fundo do modal */
+            padding: 20px; /* Preenchimento interno */
+            border-radius: 8px; /* Bordas arredondadas */
+            max-width: 400px; /* Largura máxima do modal */
+            text-align: center; /* Centraliza texto */
         }
         .modal button {
-            margin: 10px 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
+            margin: 10px 5px; /* Margem dos botões no modal */
+            padding: 10px 20px; /* Preenchimento interno dos botões */
+            font-size: 16px; /* Tamanho da fonte */
+            border-radius: 5px; /* Bordas arredondadas */
         }
         .modal button.confirmar {
-            background-color: #28a745;
-            color: white;
+            background-color: #28a745; /* Cor de fundo para o botão confirmar */
+            color: white; /* Cor do texto */
         }
         .modal button.confirmar:hover {
-            background-color: #218838;
+            background-color: #218838; /* Cor ao passar o mouse */
         }
         .modal button.cancelar {
-            background-color: #dc3545;
-            color: white;
+            background-color: #dc3545; /* Cor de fundo para o botão cancelar */
+            color: white; /* Cor do texto */
         }
         .modal button.cancelar:hover {
-            background-color: #c82333;
+            background-color: #c82333; /* Cor ao passar o mouse */
         }
 
-        /* Estilos para o alerta personalizado */
+        /* Estilos para o alerta */
         .alert {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #28a745;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            position: fixed; /* Fixa o alerta na tela */
+            top: 20px; /* Distância do topo */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translateX(-50%); /* Ajusta para centralizar */
+            background-color: #28a745; /* Cor de fundo do alerta */
+            color: white; /* Cor do texto */
+            padding: 15px; /* Preenchimento interno */
+            border-radius: 5px; /* Bordas arredondadas */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            display: none; /* Inicialmente oculto */
+            opacity: 0; /* Transparente inicialmente */
+            transition: opacity 0.5s ease; /* Transição suave */
         }
 
         /* Estilos para o formulário de edição */
         .form-edicao {
-            display: none;
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            background-color: #f8f9fa;
+            display: none; /* Inicialmente oculto */
+            margin-top: 20px; /* Espaçamento superior */
+            padding: 20px; /* Preenchimento interno */
+            border: 1px solid #ced4da; /* Borda do formulário */
+            border-radius: 5px; /* Bordas arredondadas */
+            background-color: #ffffff; /* Cor de fundo */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            max-width: 100%; /* Largura máxima */
+        }
+        .form-edicao label {
+            display: block; /* Exibe cada label em uma nova linha */
+            margin-top: 10px; /* Margem superior */
         }
         .form-edicao input {
-            width: calc(100% - 22px);
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ced4da;
+            width: 100%; /* Largura total do input */
+            margin: 10px 0; /* Margens superior e inferior */
+            padding: 10px; /* Preenchimento interno */
+            border-radius: 5px; /* Bordas arredondadas */
+            border: 1px solid #ced4da; /* Borda do input */
+            box-sizing: border-box; /* Inclui bordas e preenchimento na largura */
+        }
+        .form-edicao button {
+            width: 48%; /* Largura dos botões do formulário */
+            margin-top: 10px; /* Margem superior */
+            padding: 10px; /* Preenchimento interno */
+            font-size: 16px; /* Tamanho da fonte */
+        }
+        .form-edicao button.salvar {
+            background-color: #28a745; /* Cor de fundo para o botão salvar */
+            color: white; /* Cor do texto */
+        }
+        .form-edicao button.salvar:hover {
+            background-color: #218838; /* Cor ao passar o mouse */
+        }
+        .form-edicao button.cancelar {
+            background-color: #dc3545; /* Cor de fundo para o botão cancelar */
+            color: white; /* Cor do texto */
+        }
+        .form-edicao button.cancelar:hover {
+            background-color: #c82333; /* Cor ao passar o mouse */
         }
     </style>
 </head>
@@ -155,96 +194,109 @@
         <input type="text" id="nome" />
         <label for="email">Email:</label>
         <input type="email" id="email" />
-        <button onclick="salvarEdicao()">Salvar</button>
-        <button onclick="fecharFormularioEdicao()">Cancelar</button>
+        <button class="salvar" onclick="salvarEdicao()">Salvar</button>
+        <button class="cancelar" onclick="fecharFormularioEdicao()">Cancelar</button>
     </div>
 
     <script>
-        let usuarioIdParaExcluir;
-        let usuarioIdParaEditar;
+        let usuarioIdParaExcluir; // Armazena o ID do usuário a ser excluído
+        let usuarioIdParaEditar; // Armazena o ID do usuário a ser editado
 
+        // Função para abrir o modal de confirmação de exclusão
         function confirmarExclusao(id) {
-            usuarioIdParaExcluir = id;
-            document.getElementById('modalOverlay').style.display = 'flex';
+            usuarioIdParaExcluir = id; // Define o usuário a ser excluído
+            document.getElementById('modalOverlay').style.display = 'flex'; // Mostra o modal
         }
 
+        // Função para fechar o modal de confirmação
         function fecharModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
-            usuarioIdParaExcluir = null;
+            document.getElementById('modalOverlay').style.display = 'none'; // Esconde o modal
+            usuarioIdParaExcluir = null; // Limpa a variável
         }
 
+        // Função para confirmar a exclusão do usuário
         async function excluirUsuarioConfirmado() {
             if (usuarioIdParaExcluir) {
                 const resposta = await fetch(`/usuarios/${usuarioIdParaExcluir}`, {
-                    method: 'DELETE'
+                    method: 'DELETE' // Método HTTP DELETE
                 });
 
+                // Verifica se a resposta foi bem-sucedida
                 if (resposta.ok) {
-                    mostrarAlerta('Usuário excluído com sucesso!');
-                    document.getElementById(`usuario-${usuarioIdParaExcluir}`).remove();
+                    mostrarAlerta('Usuário excluído com sucesso!'); // Mostra alerta de sucesso
+                    document.getElementById(`usuario-${usuarioIdParaExcluir}`).remove(); // Remove o usuário da lista
                 } else {
-                    mostrarAlerta('Erro ao excluir o usuário.');
+                    mostrarAlerta('Erro ao excluir o usuário.'); // Mostra alerta de erro
                 }
             }
-            fecharModal();
+            fecharModal(); // Fecha o modal
         }
 
+        // Função para abrir o formulário de edição com os dados do usuário
         function abrirFormularioEdicao(id, nome, email) {
-            usuarioIdParaEditar = id;
-            document.getElementById('nome').value = nome;
-            document.getElementById('email').value = email;
-            document.getElementById('formEdicao').style.display = 'block';
+            usuarioIdParaEditar = id; // Define o usuário a ser editado
+            document.getElementById('nome').value = nome; // Preenche o campo nome
+            document.getElementById('email').value = email; // Preenche o campo email
+            document.getElementById('formEdicao').style.display = 'block'; // Mostra o formulário de edição
         }
 
+        // Função para fechar o formulário de edição
         function fecharFormularioEdicao() {
-            document.getElementById('formEdicao').style.display = 'none';
-            usuarioIdParaEditar = null;
+            document.getElementById('formEdicao').style.display = 'none'; // Esconde o formulário
+            usuarioIdParaEditar = null; // Limpa a variável
         }
 
+        // Função para salvar as edições feitas no usuário
         async function salvarEdicao() {
-            const novoNome = document.getElementById('nome').value;
-            const novoEmail = document.getElementById('email').value;
+            const novoNome = document.getElementById('nome').value; // Obtém o novo nome
+            const novoEmail = document.getElementById('email').value; // Obtém o novo email
 
+            // Verifica se os campos obrigatórios estão preenchidos
             if (!novoNome || !novoEmail) {
-                mostrarAlerta('Nome e email são obrigatórios.');
-                return;
+                mostrarAlerta('Nome e email são obrigatórios.'); // Mostra alerta se não estiverem preenchidos
+                return; // Interrompe a execução
             }
 
             if (usuarioIdParaEditar) {
                 try {
                     const resposta = await fetch(`/usuarios/${usuarioIdParaEditar}`, {
-                        method: 'PUT',
+                        method: 'PUT', // Método HTTP PUT
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json' // Define o tipo de conteúdo
                         },
-                        body: JSON.stringify({ nome: novoNome, email: novoEmail })
+                        body: JSON.stringify({ nome: novoNome, email: novoEmail }) // Envia os dados como JSON
                     });
 
+                    // Verifica se a resposta foi bem-sucedida
                     if (resposta.ok) {
-                        mostrarAlerta('Usuário atualizado com sucesso!');
                         const usuarioItem = document.getElementById(`usuario-${usuarioIdParaEditar}`);
-                        usuarioItem.querySelector('span').innerHTML = `Nome: ${novoNome} | Email: ${novoEmail}`;
-                        fecharFormularioEdicao();
+                        usuarioItem.querySelector('span').innerHTML = `Nome: ${novoNome} | Email: ${novoEmail}`; // Atualiza a lista com novos dados
+                        mostrarAlerta('Usuário atualizado com sucesso!'); // Mostra alerta de sucesso
+                        fecharFormularioEdicao(); // Fecha o formulário
                     } else {
-                        mostrarAlerta('Erro ao atualizar o usuário.');
+                        mostrarAlerta('Erro ao atualizar o usuário.'); // Mostra alerta de erro
                     }
                 } catch (error) {
-                    console.error('Erro ao salvar edição:', error);
-                    mostrarAlerta('Erro ao atualizar o usuário.');
+                    console.error('Erro ao salvar edição:', error); // Log de erro
+                    mostrarAlerta('Erro ao atualizar o usuário.'); // Mostra alerta de erro
                 }
             }
         }
 
+        // Função para mostrar alertas na tela
         function mostrarAlerta(mensagem) {
-            const alertDiv = document.getElementById('alert');
-            alertDiv.textContent = mensagem;
-            alertDiv.style.display = 'block';
-            alertDiv.style.opacity = '1';
+            const alertDiv = document.getElementById('alert'); // Obtém o elemento do alerta
+            alertDiv.textContent = mensagem; // Define a mensagem do alerta
+            alertDiv.style.display = 'block'; // Mostra o alerta
+            alertDiv.style.opacity = '1'; // Define opacidade para visível
 
+            // Temporizador para ocultar o alerta
             setTimeout(() => {
-                alertDiv.style.opacity = '0';
-                setTimeout(() => alertDiv.style.display = 'none', 500); // Espera o fade-out terminar
-            }, 3000);
+                alertDiv.style.opacity = '0'; // Define opacidade para invisível
+                setTimeout(() => {
+                    alertDiv.style.display = 'none'; // Esconde o alerta após transição
+                }, 500); // Tempo de espera para esconder
+            }, 2000); // Tempo que o alerta ficará visível
         }
     </script>
 </body>
