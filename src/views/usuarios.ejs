@@ -167,8 +167,8 @@
             <li id="usuario-<%= usuario.id %>">
                 <span>Nome: <%= usuario.nome %> | Email: <%= usuario.email %></span>
                 <div>
-                    <button class="editar" onclick="abrirFormularioEdicao(<%= usuario.id %>, '<%= usuario.nome %>', '<%= usuario.email %>')">Editar</button>
-                    <button class="excluir" onclick="confirmarExclusao(<%= usuario.id %>)">Excluir</button>
+                    <button class="editar" onclick="abrirFormularioEdicao('<%= usuario.id %>', '<%= usuario.nome %>', '<%= usuario.email %>')">Editar</button>
+                    <button class="excluir" onclick="confirmarExclusao('<%= usuario.id %>')">Excluir</button>
                 </div>
             </li>
         <% }) %>
@@ -301,3 +301,4 @@
     </script>
 </body>
 </html>
+

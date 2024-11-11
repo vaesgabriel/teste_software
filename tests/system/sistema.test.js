@@ -1,70 +1,150 @@
-// Importa o módulo puppeteer para realizar testes automatizados com o navegador
-const puppeteer = require('puppeteer');
-// Importa a aplicação Express que será testada
-const app = require('../../src/app');
-// Importa o modelo Usuario, que representa a tabela de usuários no banco de dados
-const Usuario = require('../../src/models/Usuario');
+const { Builder, By, until } = require('selenium-webdriver');
 
-// Mock do modelo Usuario utilizando Jest
-jest.mock('../../src/models/Usuario', () => ({
-  create: jest.fn()  // Mock do método create para simular a criação de usuário
-}));
+(async function testeCriarUsuario() {
+    const driver = await new Builder().forBrowser('chrome').build();
 
-let server; // Variável para armazenar a instância do servidor
+    try {
+        console.log('Iniciando o teste de criação de usuário...');
+        
+        // Define um tempo de espera implícito para desacelerar as interações
+        await driver.manage().setTimeouts({ implicit: 2000 });
 
-// Inicia o servidor antes de todos os testes
-beforeAll(() => {
-  server = app.listen(3000, () => console.log("Servidor rodando na porta 3000"));
-});
+        // Acessa a página de cadastro de usuários
+        console.log('Acessando a página de cadastro de usuários...');
+        await driver.get('http://localhost:3000');
+        await driver.sleep(2000); // Espera 2 segundos
 
-// Fecha o servidor após todos os testes
-afterAll(() => {
-  server.close(); // Fecha a instância do servidor
-});
+        // Preenche o formulário de cadastro
+        console.log('Preenchendo o formulário de cadastro...');
+        const inputNome = await driver.findElement(By.id('nome'));
+        await inputNome.sendKeys('Teste');
+        await driver.sleep(2000); // Pausa de 2 segundos após preencher o nome
 
-// Limpa os mocks antes de cada teste
-beforeEach(() => {
-  Usuario.create.mockClear(); // Limpa o mock do método create
-});
+        const inputEmail = await driver.findElement(By.id('email'));
+        await inputEmail.sendKeys('Teste@gmail.com');
+        await driver.sleep(2000); // Pausa de 2 segundos após preencher o email
 
-// Teste para simular a criação de um usuário no navegador
-test('Simulação de criação de usuário no navegador', async () => {
-  // Define o retorno simulado para a criação de um usuário
-  Usuario.create.mockResolvedValue({ nome: "Alice", email: "alice@example.com" });
+        // Clica no botão de cadastro
+        console.log('Clicando no botão de cadastro...');
+        const botaoCadastrar = await driver.findElement(By.css('button[type="submit"]'));
+        await botaoCadastrar.click();
+        await driver.sleep(2000); // Pausa de 2 segundos após o clique no cadastro
 
-  // Inicializa o navegador e abre uma nova página
-  let navegador;
-  try {
-    navegador = await puppeteer.launch();
-    const pagina = await navegador.newPage();
+        // Aguardando que o usuário seja cadastrado
+        console.log('Aguardando a conclusão do cadastro...');
+        await driver.sleep(2000); // Aguarda 2 segundos
 
-    // Acessa a aplicação na URL local
-    await pagina.goto('http://localhost:3000');
+        // Clica no botão "Ver Usuários" para acessar a lista
+        console.log('Clicando no botão para ver os usuários...');
+        const botaoVerUsuarios = await driver.findElement(By.css('button[onclick*="usuarios.html"]'));
+        await botaoVerUsuarios.click();
+        console.log('Botão "Ver Usuários" clicado.');
+        await driver.sleep(2000); // Pausa de 2 segundos após o clique no botão
 
-    // Preenche os campos de nome e email no formulário
-    await pagina.type('#nome', 'Alice'); // Digita 'Alice' no campo de nome
-    await pagina.type('#email', 'alice@example.com'); // Digita 'alice@example.com' no campo de email
+        // Aguardando a navegação para a página de usuários
+        console.log('Aguardando a página de usuários...');
+        await driver.wait(until.urlContains('usuarios.html'), 10000); // Verifica se a URL contém 'usuarios.html'
+        await driver.sleep(2000); // Pausa de 2 segundos após a navegação
 
-    // Clica no botão de submit para enviar o formulário
-    await pagina.click('button[type="submit"]');
+        // Aguardando a lista de usuários ser visível
+        await driver.wait(until.elementLocated(By.css('#usuariosLista li')), 10000); // Espera até que os usuários apareçam
+        await driver.sleep(2000); // Pausa de 2 segundos para visualizar os usuários
 
-    // Espera que o novo usuário apareça na lista
-    await pagina.waitForSelector('#usuariosLista li', { timeout: 5000 });
+        // Verifica se o usuário "Teste" aparece na lista
+        console.log('Verificando se o usuário aparece na lista...');
+        const listaUsuarios = await driver.findElements(By.css('#usuariosLista li')); // Seletor da lista de usuários
+        let usuarioEncontrado = false;
+        let botaoEditar;
+        let botaoExcluir;
 
-    // Obtém o texto do primeiro item da lista para verificar a criação
-    const usuarioTexto = await pagina.$eval('#usuariosLista li', el => el.textContent);
+        for (let usuario of listaUsuarios) {
+            const nomeUsuario = await usuario.getText();
+            if (nomeUsuario.includes('Teste')) {
+                usuarioEncontrado = true;
 
-    // Verifica se o texto do usuário contém os dados esperados
-    expect(usuarioTexto).toContain('Alice'); // Verifica se 'Alice' está no texto
-    expect(usuarioTexto).toContain('alice@example.com'); // Verifica se o email está no texto
+                // Localiza o botão de editar para o usuário "Teste"
+                botaoEditar = await usuario.findElement(By.css('button')); // Seletor para o botão de editar
+                break;
+            }
+        }
 
-  } catch (error) {
-    console.error('Erro durante o teste:', error);
-    throw error; // Rethrow para falhar o teste
-  } finally {
-    // Fecha o navegador ao final do teste
-    if (navegador) {
-      await navegador.close();
+        if (usuarioEncontrado && botaoEditar) {
+            console.log('Usuário "Teste" encontrado. Clicando em Editar...');
+            await botaoEditar.click(); // Clica no botão de editar
+            await driver.sleep(2000); // Pausa de 2 segundos após o clique
+
+            // Aguardando o modal de edição abrir
+            await driver.wait(until.elementLocated(By.id('modalOverlay')), 10000);
+            console.log('Modal de edição aberto.');
+            await driver.sleep(2000); // Pausa de 2 segundos para visualizar o modal
+
+            // Preenche o formulário de edição
+            const inputNomeEditado = await driver.findElement(By.id('nome'));
+            await inputNomeEditado.clear(); // Limpa o campo de nome
+            await inputNomeEditado.sendKeys('Teste Editado'); // Preenche com o novo nome
+            await driver.sleep(2000); // Pausa de 2 segundos após preencher o nome
+
+            const inputEmailEditado = await driver.findElement(By.id('email'));
+            await inputEmailEditado.clear(); // Limpa o campo de email
+            await inputEmailEditado.sendKeys('testeeditado@gmail.com'); // Preenche com o novo email
+            await driver.sleep(2000); // Pausa de 2 segundos após preencher o email
+
+            // Clica no botão de salvar
+            const botaoSalvar = await driver.findElement(By.css('button[onclick="salvarEdicao()"]'));
+            await botaoSalvar.click();
+            console.log('Clicando no botão de salvar...');
+            await driver.sleep(2000); // Pausa de 2 segundos após salvar
+
+            // Aguardando a atualização do usuário
+            await driver.sleep(2000); // Aguarda 2 segundos após salvar a edição
+
+            console.log('Usuário editado com sucesso!');
+        } else {
+            console.log('Usuário "Teste" não encontrado ou botão de editar não encontrado.');
+        }
+
+        // Aguardando a lista de usuários ser visível após a edição
+        console.log('Recarregando a lista de usuários...');
+        await driver.get('http://localhost:3000/usuarios.html');
+        await driver.sleep(2000); // Pausa de 2 segundos após recarregar a página
+
+        // Agora, vamos procurar o usuário editado e clicar no botão de excluir
+        const listaUsuariosAtualizada = await driver.findElements(By.css('#usuariosLista li'));
+        let usuarioEditadoExcluido = false;
+
+        for (let usuario of listaUsuariosAtualizada) {
+            const nomeUsuario = await usuario.getText();
+            if (nomeUsuario.includes('Teste Editado')) {
+                usuarioEditadoExcluido = true;
+
+                // Localiza o botão de excluir para o usuário editado
+                botaoExcluir = await usuario.findElement(By.css('button.excluir')); // Seletor para o botão de excluir
+                break;
+            }
+        }
+
+        if (usuarioEditadoExcluido && botaoExcluir) {
+            console.log('Usuário editado encontrado. Clicando em Excluir...');
+            await botaoExcluir.click(); // Clica no botão de excluir
+            await driver.sleep(2000); // Pausa de 2 segundos após clicar no botão de excluir
+
+            // Aguardando o botão de confirmação de exclusão aparecer
+            console.log('Aguardando o botão de confirmação de exclusão...');
+            const botaoConfirmarExclusao = await driver.findElement(By.css('button.confirmar')); // Seletor para o botão de confirmação
+            await botaoConfirmarExclusao.click(); // Clica no botão de confirmar exclusão
+            await driver.sleep(2000); // Pausa de 2 segundos após a confirmação
+
+            // Aguardando a exclusão do usuário
+            await driver.sleep(2000); // Pausa de 2 segundos após a exclusão
+            console.log('Usuário excluído com sucesso!');
+        } else {
+            console.log('Usuário editado não encontrado ou botão de excluir não encontrado.');
+        }
+
+    } catch (error) {
+        console.error('Erro durante o teste:', error);
+    } finally {
+        console.log('Encerrando o teste e fechando o navegador.');
+        await driver.quit();
     }
-  }
-});
+})();

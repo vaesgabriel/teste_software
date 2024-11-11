@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "main": "src/app.js",
     "dependencies": {
+        "chromedriver": "^130.0.4",
         "ejs": "^3.1.10",
         "express": "^4.17.1",
         "pg": "^8.13.1",
@@ -13,11 +14,17 @@
     "devDependencies": {
         "jest": "^29.7.0",
         "puppeteer": "^23.6.1",
-        "selenium-webdriver": "^4.0.0-alpha.7",
+        "selenium-webdriver": "^4.26.0",
         "supertest": "^6.0.1"
     },
     "scripts": {
         "start": "node src/app.js",
-        "test": "jest"
+        "test": "jest",
+        "test:selenium": "node tests/system/sistema.test.js"
+    },
+    "jest": {
+        "testPathIgnorePatterns": [
+            "/tests/system/sistema.test.js"
+        ]
     }
 }
