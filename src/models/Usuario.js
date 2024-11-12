@@ -1,8 +1,8 @@
 // Importa DataTypes do Sequelize, que permite definir tipos de dados para as colunas do modelo
-const { DataTypes } = require('sequelize'); 
+const { DataTypes } = require('sequelize');
 
 // Importa a conexão com o banco de dados definida em um arquivo separado
-const sequelize = require('../database'); 
+const sequelize = require('../database');
 
 // Define o modelo 'Usuario' utilizando o Sequelize
 const Usuario = sequelize.define('Usuario', {

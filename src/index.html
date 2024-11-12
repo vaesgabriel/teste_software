@@ -1,114 +1,167 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Define como a página deve ser exibida em dispositivos móveis -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Define como a página deve ser exibida em dispositivos móveis -->
     <title>Teste de Sistema</title>
     <style>
         body {
-            font-family: Arial, sans-serif; /* Define a fonte utilizada na página */
-            background-color: #f0f0f0; /* Cor de fundo da página */
-            margin: 0; /* Remove margens padrão do body */
-            padding: 20px; /* Adiciona um espaçamento interno */
+            font-family: Arial, sans-serif;
+            /* Define a fonte utilizada na página */
+            background-color: #f0f0f0;
+            /* Cor de fundo da página */
+            margin: 0;
+            /* Remove margens padrão do body */
+            padding: 20px;
+            /* Adiciona um espaçamento interno */
         }
-    
+
         h1 {
-            color: #333; /* Cor do título */
-            text-align: center; /* Centraliza o título */
+            color: #333;
+            /* Cor do título */
+            text-align: center;
+            /* Centraliza o título */
         }
-    
+
         form {
-            background-color: #fff; /* Cor de fundo do formulário */
-            padding: 20px; /* Adiciona espaçamento interno ao formulário */
-            border-radius: 5px; /* Arredonda os cantos do formulário */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ao formulário */
-            max-width: 400px; /* Largura máxima do formulário */
-            margin: auto; /* Centraliza o formulário na página */
+            background-color: #fff;
+            /* Cor de fundo do formulário */
+            padding: 20px;
+            /* Adiciona espaçamento interno ao formulário */
+            border-radius: 5px;
+            /* Arredonda os cantos do formulário */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Sombra ao formulário */
+            max-width: 400px;
+            /* Largura máxima do formulário */
+            margin: auto;
+            /* Centraliza o formulário na página */
         }
-    
+
         input[type="text"],
         input[type="email"] {
-            width: calc(100% - 20px); /* Largura dos campos de entrada */
-            padding: 10px; /* Adiciona espaçamento interno aos campos */
-            margin: 10px auto; /* Margem vertical aos campos */
-            border: 1px solid #ccc; /* Borda dos campos */
-            border-radius: 5px; /* Arredonda os cantos dos campos */
-            display: block; /* Garante que os campos sejam exibidos em bloco */
+            width: calc(100% - 20px);
+            /* Largura dos campos de entrada */
+            padding: 10px;
+            /* Adiciona espaçamento interno aos campos */
+            margin: 10px auto;
+            /* Margem vertical aos campos */
+            border: 1px solid #ccc;
+            /* Borda dos campos */
+            border-radius: 5px;
+            /* Arredonda os cantos dos campos */
+            display: block;
+            /* Garante que os campos sejam exibidos em bloco */
         }
-    
+
         .button-container {
-            display: flex; /* Utiliza flexbox para o layout dos botões */
-            flex-direction: column; /* Direção dos itens como coluna */
-            gap: 10px; /* Espaçamento entre os botões */
+            display: flex;
+            /* Utiliza flexbox para o layout dos botões */
+            flex-direction: column;
+            /* Direção dos itens como coluna */
+            gap: 10px;
+            /* Espaçamento entre os botões */
         }
-    
+
         button {
-            background-color: #28a745; /* Cor de fundo do botão padrão */
-            color: white; /* Cor do texto do botão */
-            padding: 10px; /* Espaçamento interno ao botão */
-            border: none; /* Remove a borda padrão */
-            border-radius: 5px; /* Arredonda os cantos do botão */
-            cursor: pointer; /* Muda o cursor para indicar que é clicável */
-            width: 100%; /* Largura do botão como 100% */
+            background-color: #28a745;
+            /* Cor de fundo do botão padrão */
+            color: white;
+            /* Cor do texto do botão */
+            padding: 10px;
+            /* Espaçamento interno ao botão */
+            border: none;
+            /* Remove a borda padrão */
+            border-radius: 5px;
+            /* Arredonda os cantos do botão */
+            cursor: pointer;
+            /* Muda o cursor para indicar que é clicável */
+            width: 100%;
+            /* Largura do botão como 100% */
         }
-    
+
         button:hover {
-            background-color: #218838; /* Cor do botão ao passar o mouse */
+            background-color: #218838;
+            /* Cor do botão ao passar o mouse */
         }
-    
+
         /* Estilo específico para o botão "Ver Usuários" em azul */
         .button-container button:last-child {
-            background-color: #007bff; /* Cor de fundo do botão "Ver Usuários" */
+            background-color: #007bff;
+            /* Cor de fundo do botão "Ver Usuários" */
         }
-    
+
         .button-container button:last-child:hover {
-            background-color: #0069d9; /* Cor do botão "Ver Usuários" ao passar o mouse */
+            background-color: #0069d9;
+            /* Cor do botão "Ver Usuários" ao passar o mouse */
         }
-    
+
         ul {
-            list-style-type: none; /* Remove as bolinhas da lista */
-            padding: 0; /* Remove o padding padrão */
+            list-style-type: none;
+            /* Remove as bolinhas da lista */
+            padding: 0;
+            /* Remove o padding padrão */
         }
-    
+
         li {
-            background-color: #fff; /* Cor de fundo dos itens da lista */
-            margin: 5px 0; /* Margem vertical aos itens */
-            padding: 10px; /* Espaçamento interno aos itens */
-            border-radius: 5px; /* Arredonda os cantos dos itens */
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Sombra aos itens */
+            background-color: #fff;
+            /* Cor de fundo dos itens da lista */
+            margin: 5px 0;
+            /* Margem vertical aos itens */
+            padding: 10px;
+            /* Espaçamento interno aos itens */
+            border-radius: 5px;
+            /* Arredonda os cantos dos itens */
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            /* Sombra aos itens */
         }
-    
+
         /* Estilo para mensagens de alerta */
         .alert {
-            text-align: center; /* Centraliza o texto do alerta */
-            margin-top: 10px; /* Margem acima do alerta */
-            padding: 10px; /* Espaçamento interno ao alerta */
-            border-radius: 5px; /* Arredonda os cantos do alerta */
-            display: none; /* Esconde o alerta por padrão */
+            text-align: center;
+            /* Centraliza o texto do alerta */
+            margin-top: 10px;
+            /* Margem acima do alerta */
+            padding: 10px;
+            /* Espaçamento interno ao alerta */
+            border-radius: 5px;
+            /* Arredonda os cantos do alerta */
+            display: none;
+            /* Esconde o alerta por padrão */
         }
-    
+
         .alert.success {
-            background-color: #d4edda; /* Cor de fundo para alertas de sucesso */
-            color: #155724; /* Cor do texto para alertas de sucesso */
-            border: 1px solid #c3e6cb; /* Borda para alertas de sucesso */
+            background-color: #d4edda;
+            /* Cor de fundo para alertas de sucesso */
+            color: #155724;
+            /* Cor do texto para alertas de sucesso */
+            border: 1px solid #c3e6cb;
+            /* Borda para alertas de sucesso */
         }
-    
+
         .alert.error {
-            background-color: #f8d7da; /* Cor de fundo para alertas de erro */
-            color: #721c24; /* Cor do texto para alertas de erro */
-            border: 1px solid #f5c6cb; /* Borda para alertas de erro */
+            background-color: #f8d7da;
+            /* Cor de fundo para alertas de erro */
+            color: #721c24;
+            /* Cor do texto para alertas de erro */
+            border: 1px solid #f5c6cb;
+            /* Borda para alertas de erro */
         }
     </style>
 </head>
+
 <body>
     <h1>Cadastro de Usuários</h1>
     <form id="usuarioForm">
         <input type="text" id="nome" placeholder="Nome" required /> <!-- Campo para inserir o nome do usuário -->
         <input type="email" id="email" placeholder="Email" required /> <!-- Campo para inserir o email do usuário -->
-        
+
         <div class="button-container">
             <button type="submit">Cadastrar</button> <!-- Botão para cadastrar o usuário -->
-            <button type="button" onclick="window.location.href='usuarios.html'">Ver Usuários</button> <!-- Botão para redirecionar para a página de usuários -->
+            <button type="button" onclick="window.location.href='usuarios.html'">Ver Usuários</button>
+            <!-- Botão para redirecionar para a página de usuários -->
         </div>
     </form>
 
@@ -155,4 +208,5 @@
         };
     </script>
 </body>
+
 </html>

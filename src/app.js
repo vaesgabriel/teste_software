@@ -5,7 +5,7 @@ const path = require('path');
 // Importa as rotas relacionadas a usuários definidas em outro arquivo
 const usuarioRoutes = require('./routes/usuarios');
 // Importa a conexão com o banco de dados definida em um arquivo separado
-const sequelize = require('./database'); 
+const sequelize = require('./database');
 const Usuario = require('./models/Usuario'); // Importa o modelo Usuario
 
 // Cria uma instância da aplicação Express
@@ -45,7 +45,7 @@ app.get('/usuarios.html', async (req, res) => {
 const startServer = async () => {
   try {
     // Sincroniza os modelos definidos com o banco de dados
-    await sequelize.sync(); 
+    await sequelize.sync();
     const PORT = 3000; // Define a porta que o servidor irá escutar
     app.listen(PORT, () => {
       // Exibe uma mensagem no console informando que o servidor está rodando

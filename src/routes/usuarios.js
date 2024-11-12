@@ -1,7 +1,7 @@
 // Importa o framework Express, que é usado para criar o servidor e definir rotas
 const express = require('express');
 // Importa o modelo Usuario, que representa a tabela de usuários no banco de dados
-const Usuario = require('../models/Usuario'); 
+const Usuario = require('../models/Usuario');
 
 // Cria uma instância do roteador do Express
 const router = express.Router();

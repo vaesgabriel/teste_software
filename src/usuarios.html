@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,16 +35,23 @@
         }
 
         button {
-            background-color: #007bff; /* Cor do botão */
-            color: white; /* Cor do texto do botão */
-            border: none; /* Remove a borda padrão */
-            padding: 5px 10px; /* Adiciona espaçamento interno */
-            border-radius: 5px; /* Arredonda os cantos do botão */
-            cursor: pointer; /* Muda o cursor para indicar que é clicável */
+            background-color: #007bff;
+            /* Cor do botão */
+            color: white;
+            /* Cor do texto do botão */
+            border: none;
+            /* Remove a borda padrão */
+            padding: 5px 10px;
+            /* Adiciona espaçamento interno */
+            border-radius: 5px;
+            /* Arredonda os cantos do botão */
+            cursor: pointer;
+            /* Muda o cursor para indicar que é clicável */
         }
 
         button:hover {
-            background-color: #0056b3; /* Cor do botão ao passar o mouse */
+            background-color: #0056b3;
+            /* Cor do botão ao passar o mouse */
         }
 
         /* Estilos do modal de edição */
@@ -65,7 +73,8 @@
             border-radius: 8px;
             max-width: 400px;
             width: 100%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra do modal */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            /* Sombra do modal */
         }
 
         .modal input {
@@ -77,6 +86,7 @@
         }
     </style>
 </head>
+
 <body>
     <h1>Lista de Usuários</h1>
     <ul id="usuariosLista"></ul>
@@ -175,4 +185,5 @@
         window.onload = carregarUsuarios;
     </script>
 </body>
+
 </html>

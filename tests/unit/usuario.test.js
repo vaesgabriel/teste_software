@@ -1,38 +1,44 @@
-// Importa o modelo Usuario, que representa a tabela de usuários no banco de dados
+// Importa o modelo de dados "Usuario" da aplicação
 const Usuario = require('../../src/models/Usuario');
 
-// Mock do modelo Usuario utilizando Jest
+// Usa o Jest para simular as funções do modelo Usuario
 jest.mock('../../src/models/Usuario', () => ({
-  create: jest.fn(),  // Mock do método create para simular a criação de um novo usuário
-  findAll: jest.fn()   // Mock do método findAll, caso seja usado em outros testes
+  create: jest.fn(),    // Simula a função de criação de usuário
+  findAll: jest.fn(),    // Simula a função de busca de todos os usuários (não utilizada neste exemplo)
 }));
 
-// Limpa os mocks antes de cada teste
+// Limpa as simulações antes de cada teste para evitar interferências
 beforeEach(() => {
-  Usuario.create.mockClear(); // Limpa o mock do método create
+  Usuario.create.mockClear();  // Limpa o histórico de chamadas da função create
 });
 
-// Teste para a criação de um novo usuário
+// Teste para criação de um novo usuário com dados válidos
 test('Criação de um novo usuário', async () => {
-  // Define o retorno simulado para o método create
+  console.log('Iniciando teste: Criação de usuário com dados válidos.');
+
+  // Define o valor que a função mockada `create` deve retornar quando chamada
   Usuario.create.mockResolvedValue({ nome: "Alice", email: "alice@example.com" });
 
-  // Chama o método create com os dados do novo usuário
+  // Executa a criação do usuário e armazena o resultado
   const usuario = await Usuario.create({ nome: "Alice", email: "alice@example.com" });
 
-  // Verifica se o usuário criado contém as propriedades corretas
-  expect(usuario.nome).toBe("Alice"); // Verifica se o nome do usuário é "Alice"
-  expect(usuario.email).toBe("alice@example.com"); // Verifica se o email do usuário é "alice@example.com"
+  // Verifica se os dados retornados são os esperados
+  expect(usuario.nome).toBe("Alice");
+  expect(usuario.email).toBe("alice@example.com");
 
-  // Verifica se o método create foi chamado com os argumentos corretos
+  // Verifica se a função `create` foi chamada com os dados corretos
   expect(Usuario.create).toHaveBeenCalledWith({ nome: "Alice", email: "alice@example.com" });
+  console.log('Usuário criado com sucesso.');
 });
 
-// Teste para a criação de um novo usuário com erro
+// Teste para criação de usuário com erro
 test('Tentativa de criação de um usuário com erro', async () => {
-  // Simula um erro ao tentar criar um usuário
+  console.log('Iniciando teste: Criação de usuário com erro.');
+
+  // Define o comportamento da função `create` para simular um erro
   Usuario.create.mockRejectedValue(new Error('Erro ao criar usuário'));
 
-  // Verifica se um erro é lançado ao tentar criar um usuário
+  // Verifica se a função `create` lança um erro ao tentar criar o usuário
   await expect(Usuario.create({ nome: "Alice", email: "alice@example.com" })).rejects.toThrow('Erro ao criar usuário');
+  console.log('Erro ao criar usuário verificado com sucesso.');
 });
